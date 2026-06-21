@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { MapPin, Clock, Utensils, Car, Fish, TreePine, Flame, ChevronDown, ChevronUp, ExternalLink, Users, Banknote } from "lucide-react";
+import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 
 // Verified Unsplash photo IDs
 const PHOTOS = {
@@ -84,7 +85,7 @@ const TYPE_DOT: Record<string, string> = {
   evening: "bg-[#7A58C0]",
 };
 
-type Item = { time: string; icon: React.ReactNode; title: string; desc: string; type: string; links?: { label: string; url: string }[] };
+type Item = { time: string; icon: ReactNode; title: string; desc: string; type: string; links?: { label: string; url: string }[] };
 
 function TimelineItem({ item, last }: { item: Item; last?: boolean }) {
   return (
@@ -120,7 +121,7 @@ function DaySection({ day, title, date, items, photo }: { day: number; title: st
     <div className="mb-6">
       <button onClick={() => setOpen(!open)} className="w-full text-left group">
         <div className="relative rounded-xl overflow-hidden bg-[#2A160A]" style={{ height: 160 }}>
-          <img src={photo} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105" />
+          <ImageWithFallback src={photo} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E0600]/90 via-[#0E0600]/40 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <p className="text-[10px] font-mono tracking-[0.2em] text-[#D4823C] uppercase mb-0.5">{date}</p>
@@ -169,7 +170,7 @@ export default function App() {
 
       {/* ── HERO ── */}
       <div className="relative" style={{ minHeight: 500 }}>
-        <img src={PHOTOS.hero} alt="Русская деревня" className="absolute inset-0 w-full h-full object-cover" />
+        <ImageWithFallback src={PHOTOS.hero} alt="Русская деревня" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-[#130C05]" />
 
         <div className="relative z-10 max-w-2xl mx-auto px-5 pt-14 pb-16">
@@ -221,7 +222,7 @@ export default function App() {
         {/* ACCOMMODATION */}
         <div className="rounded-2xl overflow-hidden border border-white/[0.09] bg-[#1E1008] mb-8 shadow-xl">
           <div className="relative overflow-hidden bg-[#2A160A]" style={{ height: 200 }}>
-            <img src={PHOTOS.house} alt="Деревенский дом" className="absolute inset-0 w-full h-full object-cover opacity-75" />
+            <ImageWithFallback src={PHOTOS.house} alt="Деревенский дом" className="absolute inset-0 w-full h-full object-cover opacity-75" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1E1008] via-[#1E1008]/30 to-transparent" />
             <div className="absolute bottom-0 left-0 p-5">
               <p className="text-[10px] font-mono tracking-widest text-[#F5C878] uppercase mb-1">Место проживания</p>
@@ -263,7 +264,7 @@ export default function App() {
 
           {/* Header with photo */}
           <div className="relative bg-[#0A0500]" style={{ height: 140 }}>
-            <img src={PHOTOS.food} alt="Стол с едой" className="absolute inset-0 w-full h-full object-cover opacity-35" />
+            <ImageWithFallback src={PHOTOS.food} alt="Стол с едой" className="absolute inset-0 w-full h-full object-cover opacity-35" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A0500]/90" />
             <div className="relative z-10 h-full flex flex-col justify-end px-5 pb-4">
               <p className="text-[10px] font-mono tracking-widest text-[#D4823C] uppercase mb-0.5">Финансовый расчёт</p>
