@@ -1,16 +1,12 @@
 import { useState, type ReactNode } from "react";
 import { MapPin, Clock, Utensils, Car, Fish, TreePine, Flame, ChevronDown, ChevronUp, ExternalLink, Users, Banknote } from "lucide-react";
-import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 
-// Verified Unsplash photo IDs
-const PHOTOS = {
-  hero: "https://images.unsplash.com/photo-1650893737226-bdbf84b4c57e?w=1400&h=800&fit=crop&auto=format",
-  day1: "https://images.unsplash.com/photo-1625426818317-95001074dc78?w=800&h=400&fit=crop&auto=format",
-  day2: "https://images.unsplash.com/photo-1665138322353-10027b2190fa?w=800&h=400&fit=crop&auto=format",
-  day3: "https://images.unsplash.com/photo-1597957729111-848ad99de4b5?w=800&h=400&fit=crop&auto=format",
-  house: "https://images.unsplash.com/photo-1739281498278-00e47a49f0eb?w=800&h=360&fit=crop&auto=format",
-  food: "https://images.unsplash.com/photo-1547573854-74d2a71d0826?w=800&h=300&fit=crop&auto=format",
-};
+// Gradient backgrounds per section (no external images)
+const DAY_GRADIENTS = [
+  "linear-gradient(135deg, #3D2008 0%, #1A4A20 50%, #1C2A40 100%)", // Day 1: amber → forest
+  "linear-gradient(135deg, #1A3A10 0%, #0E2A30 60%, #2A1A08 100%)", // Day 2: deep green → teal
+  "linear-gradient(135deg, #1C2A40 0%, #301808 70%, #1A1A1A 100%)", // Day 3: dusk blue → dark
+];
 
 const DAY1 = [
   { time: "09:30–10:00", icon: <Car size={15} />, title: "Выезд Москва → Тула", desc: "189 км · бензин 2 000 ₽/машину", type: "travel" },
@@ -115,14 +111,13 @@ function TimelineItem({ item, last }: { item: Item; last?: boolean }) {
   );
 }
 
-function DaySection({ day, title, date, items, photo }: { day: number; title: string; date: string; items: Item[]; photo: string }) {
+function DaySection({ day, title, date, items, gradient }: { day: number; title: string; date: string; items: Item[]; gradient: string }) {
   const [open, setOpen] = useState(day === 1);
   return (
     <div className="mb-6">
       <button onClick={() => setOpen(!open)} className="w-full text-left group">
-        <div className="relative rounded-xl overflow-hidden bg-[#2A160A]" style={{ height: 160 }}>
-          <ImageWithFallback src={photo} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0E0600]/90 via-[#0E0600]/40 to-transparent" />
+        <div className="relative rounded-xl overflow-hidden" style={{ height: 160, background: gradient }}>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <p className="text-[10px] font-mono tracking-[0.2em] text-[#D4823C] uppercase mb-0.5">{date}</p>
             <h3 className="text-xl font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -169,9 +164,8 @@ export default function App() {
     <div className="min-h-screen bg-[#130C05]" style={{ fontFamily: "'Lora', serif" }}>
 
       {/* ── HERO ── */}
-      <div className="relative" style={{ minHeight: 500 }}>
-        <ImageWithFallback src={PHOTOS.hero} alt="Русская деревня" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-[#130C05]" />
+      <div className="relative" style={{ minHeight: 500, background: "linear-gradient(160deg, #2A4A1A 0%, #1A2E40 35%, #3D2008 70%, #130C05 100%)" }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#130C05]" />
 
         <div className="relative z-10 max-w-2xl mx-auto px-5 pt-14 pb-16">
           <p className="text-[11px] tracking-[0.28em] text-[#D4823C] uppercase font-mono mb-4">
@@ -221,9 +215,8 @@ export default function App() {
 
         {/* ACCOMMODATION */}
         <div className="rounded-2xl overflow-hidden border border-white/[0.09] bg-[#1E1008] mb-8 shadow-xl">
-          <div className="relative overflow-hidden bg-[#2A160A]" style={{ height: 200 }}>
-            <ImageWithFallback src={PHOTOS.house} alt="Деревенский дом" className="absolute inset-0 w-full h-full object-cover opacity-75" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1E1008] via-[#1E1008]/30 to-transparent" />
+          <div className="relative overflow-hidden" style={{ height: 200, background: "linear-gradient(135deg, #4A2A08 0%, #1E3A18 50%, #2A1A0A 100%)" }}>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1E1008] via-[#1E1008]/20 to-transparent" />
             <div className="absolute bottom-0 left-0 p-5">
               <p className="text-[10px] font-mono tracking-widest text-[#F5C878] uppercase mb-1">Место проживания</p>
               <h2 className="text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -255,17 +248,16 @@ export default function App() {
           Программа тура
         </h2>
 
-        <DaySection day={1} title="Тула — Мценск" date="13 июля 2026, понедельник" items={DAY1} photo={PHOTOS.day1} />
-        <DaySection day={2} title="Николо-Вяземское — Усадьба Толстых" date="14 июля 2026, вторник" items={DAY2} photo={PHOTOS.day2} />
-        <DaySection day={3} title="Возвращение в Москву" date="15 июля 2026, среда" items={DAY3} photo={PHOTOS.day3} />
+        <DaySection day={1} title="Тула — Мценск" date="13 июля 2026, понедельник" items={DAY1} gradient={DAY_GRADIENTS[0]} />
+        <DaySection day={2} title="Николо-Вяземское — Усадьба Толстых" date="14 июля 2026, вторник" items={DAY2} gradient={DAY_GRADIENTS[1]} />
+        <DaySection day={3} title="Возвращение в Москву" date="15 июля 2026, среда" items={DAY3} gradient={DAY_GRADIENTS[2]} />
 
         {/* COST CALCULATOR */}
         <div className="mt-8 rounded-2xl overflow-hidden border border-white/[0.09] shadow-xl">
 
-          {/* Header with photo */}
-          <div className="relative bg-[#0A0500]" style={{ height: 140 }}>
-            <ImageWithFallback src={PHOTOS.food} alt="Стол с едой" className="absolute inset-0 w-full h-full object-cover opacity-35" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A0500]/90" />
+          {/* Header */}
+          <div className="relative" style={{ height: 140, background: "linear-gradient(135deg, #3A1A04 0%, #1A0A00 100%)" }}>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#120800]/80" />
             <div className="relative z-10 h-full flex flex-col justify-end px-5 pb-4">
               <p className="text-[10px] font-mono tracking-widest text-[#D4823C] uppercase mb-0.5">Финансовый расчёт</p>
               <h2 className="text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
